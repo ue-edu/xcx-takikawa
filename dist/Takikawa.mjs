@@ -1350,8 +1350,10 @@ var ja = {
 	"TakikawaBlocks.setMotor": "モーター[MOTOR_LR]を[POWER_LEVEL]の速さにする",
 	"TakikawaBlocks.setMotorDual": "モーター 左[POWER_LEVEL_L] 右[POWER_LEVEL_R]の速さにする",
 	"TakikawaBlocks.getFrontDistance": "前距離センサー",
-	"TakikawaBlocks.getSideDistance": "横距離センサー [MOTOR_LR]",
-	"TakikawaBlocks.getEncoder": "エンコーダー [MOTOR_LR]",
+	"TakikawaBlocks.getSideDistanceL": "左距離センサー",
+	"TakikawaBlocks.getSideDistanceR": "右距離センサー",
+	"TakikawaBlocks.getEncoderL": "左エンコーダー",
+	"TakikawaBlocks.getEncoderR": "右エンコーダー",
 	"TakikawaBlocks.resetEncoder": "エンコーダー [MOTOR_LR] をリセット"
 };
 var translations = {
@@ -1362,9 +1364,11 @@ var translations = {
 	"takikawa.motorMenu.M2": "みぎ",
 	"TakikawaBlocks.setMotor": "モーター[MOTOR_LR]を[POWER_LEVEL]のはやさにする",
 	"TakikawaBlocks.setMotorDual": "モーター ひだり[POWER_LEVEL_L] みぎ[POWER_LEVEL_R]のはやさにする",
-	"TakikawaBlocks.getFrontDistance": "まえきょりセンサー",
-	"TakikawaBlocks.getSideDistance": "よこきょりセンサー [MOTOR_LR]",
-	"TakikawaBlocks.getEncoder": "エンコーダー [MOTOR_LR]",
+	"TakikawaBlocks.getFrontDistance": "まえ きょりセンサー",
+	"TakikawaBlocks.getSideDistanceL": "ひだり きょりセンサー",
+	"TakikawaBlocks.getSideDistanceR": "みぎ きょりセンサー",
+	"TakikawaBlocks.getEncoderL": "ひだり エンコーダー",
+	"TakikawaBlocks.getEncoderR": "みぎ エンコーダー",
 	"TakikawaBlocks.resetEncoder": "エンコーダー [MOTOR_LR] をリセット"
 }
 };
@@ -3093,15 +3097,24 @@ var TakikawaBlocks = /*#__PURE__*/function () {
       return this._peripheral.readFrontDistance();
     }
   }, {
-    key: "getSideDistance",
-    value: function getSideDistance(args) {
-      return this._peripheral.readSideDistance(args.MOTOR_LR);
+    key: "getSideDistanceL",
+    value: function getSideDistanceL() {
+      return this._peripheral.readSideDistance(TakikawaMotorName.M1);
     }
   }, {
-    key: "getEncoder",
-    value: function getEncoder(args) {
-      console.log("getEncoder Motor=", args.MOTOR_LR);
-      return this._peripheral.readEncoder(args.MOTOR_LR);
+    key: "getSideDistanceR",
+    value: function getSideDistanceR() {
+      return this._peripheral.readSideDistance(TakikawaMotorName.M2);
+    }
+  }, {
+    key: "getEncoderL",
+    value: function getEncoderL() {
+      return this._peripheral.readEncoder(TakikawaMotorName.M1);
+    }
+  }, {
+    key: "getEncoderR",
+    value: function getEncoderR() {
+      return this._peripheral.readEncoder(TakikawaMotorName.M2);
     }
   }, {
     key: "resetEncoder",
@@ -3171,35 +3184,37 @@ var TakikawaBlocks = /*#__PURE__*/function () {
           }),
           blockType: blockType.REPORTER
         }, {
-          opcode: 'getSideDistance',
+          opcode: 'getSideDistanceL',
           text: formatMessage({
-            id: 'TakikawaBlocks.getSideDistance',
-            default: 'side distance [MOTOR_LR]',
-            description: 'value of distance to side object (mm)'
+            id: 'TakikawaBlocks.getSideDistanceL',
+            default: 'side distance L',
+            description: 'value of distance to Side(Left) object (mm)'
           }),
-          blockType: blockType.REPORTER,
-          arguments: {
-            MOTOR_LR: {
-              type: argumentType.STRING,
-              menu: 'motor',
-              defaultValue: TakikawaMotorName.M1
-            }
-          }
+          blockType: blockType.REPORTER
+        }, {
+          opcode: 'getSideDistanceR',
+          text: formatMessage({
+            id: 'TakikawaBlocks.getSideDistanceR',
+            default: 'side distance R',
+            description: 'value of distance to Side(Right) object (mm)'
+          }),
+          blockType: blockType.REPORTER
         }, '---', {
-          opcode: 'getEncoder',
+          opcode: 'getEncoderL',
           text: formatMessage({
-            id: 'TakikawaBlocks.getEncoder',
-            default: 'Encoder count [MOTOR_LR]',
-            description: 'value of Encoder count. '
+            id: 'TakikawaBlocks.getEncoderL',
+            default: 'Encoder count L',
+            description: 'value of Left Encoder count.'
           }),
-          blockType: blockType.REPORTER,
-          arguments: {
-            MOTOR_LR: {
-              type: argumentType.STRING,
-              menu: 'motor',
-              defaultValue: TakikawaMotorName.M1
-            }
-          }
+          blockType: blockType.REPORTER
+        }, {
+          opcode: 'getEncoderR',
+          text: formatMessage({
+            id: 'TakikawaBlocks.getEncoderR',
+            default: 'Encoder count R',
+            description: 'value of Right Encoder count.'
+          }),
+          blockType: blockType.REPORTER
         }, {
           opcode: 'resetEncoder',
           text: formatMessage({
